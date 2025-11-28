@@ -6,4 +6,5 @@ def athletes():
         
         for row in csvreader:
             print(row)
+athletes()
 
