@@ -1,5 +1,6 @@
 import csv
-
+#Global variables
+athletes = {}
 stations = {
         "LJ": ["LJ1", "LJ2"],
         "TJ": ["TJ1", "TJ2"],
@@ -13,7 +14,6 @@ stations = {
     }
 
 def AthletesCSVreader():
-    athletes = {}
     with open("athletes.csv", newline='') as f:
         reader = csv.DictReader(f)
         metadata = {"Name", "Sex", "Age", "Country"}
@@ -34,9 +34,8 @@ def AthletesCSVreader():
                         pr = val
                     entries[d] = pr
             athletes[name] = entries
-    return athletes, events
 
-def Schedules(athletes, stations):
+def Schedules():
     schedule = []
     occupied = {}
     for athlete in sorted(athletes.keys()):
@@ -71,18 +70,18 @@ def Schedules(athletes, stations):
 def writeschedule(schedule, filname="schedule.csv"):
     filnames = ["TimeSlot", "Station", "Discipline", "Athlete", "PR"]
     with open(filname, "w", newline='',) as f:
-        writer = csv.DictWriter(f, fieldnames=filnames)
-        writer.writeheader()
+        write = csv.DictWriter(f, fieldnames=filnames)
+        write.writeheader()
         for row in schedule:
             r = dict(row)
             r["PR"] = "" if r["PR"] is None else r["PR"]
-            writer.writerow(r)
+            write.writerow(r)
 
 def main():
-    output_filename = "schedule.csv"
-    athletes, allColumns = AthletesCSVreader()
-    schedule = Schedules(athletes, stations)
-    writeschedule(schedule, output_filename)
-    print(f"Scheduled {len(schedule)} event entries -> {output_filename}")
+    outputfile = "schedule.csv"
+    AthletesCSVreader()
+    schedule = Schedules()
+    writeschedule(schedule, outputfile)
+    print(f"Scheduled {len(schedule)} event entries -> {outputfile}")
 
 main()
