@@ -13,7 +13,7 @@ stations = {
         "1600m": ["TRACK"]
     }
 
-def AthletesCSVreader():
+def CSVreader():
     with open("athletes.csv", newline='') as f:
         reader = csv.DictReader(f)
         metadata = {"Name", "Sex", "Age", "Country"}
@@ -42,7 +42,7 @@ def Schedules():
         athleteevents = athletes[athlete]
         for discipline in sorted(athleteevents.keys()):
             assigned = False
-            slot = 0
+            slot = 1
             while not assigned:
                 if slot not in occupied:
                     occupied[slot] = {}
@@ -67,7 +67,7 @@ def Schedules():
     schedule.sort(key=lambda x: (x["TimeSlot"], x["Station"]))
     return schedule
 
-def writeschedule(schedule, filname="schedule.csv"):
+def OutputCSV(schedule, filname="schedule.csv"):
     filnames = ["TimeSlot", "Station", "Discipline", "Athlete", "PR"]
     with open(filname, "w", newline='',) as f:
         write = csv.DictWriter(f, fieldnames=filnames)
@@ -79,9 +79,11 @@ def writeschedule(schedule, filname="schedule.csv"):
 
 def main():
     outputfile = "schedule.csv"
-    AthletesCSVreader()
+    CSVreader()
     schedule = Schedules()
-    writeschedule(schedule, outputfile)
+    OutputCSV(schedule, outputfile)
     print(f"Scheduled {len(schedule)} event entries -> {outputfile}")
 
-main()
+
+if __name__ == "__main__":
+    main()
